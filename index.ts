@@ -1,9 +1,17 @@
 import './style.css';
 
-import { of, map, Observable } from 'rxjs';
+import { map, interval } from 'rxjs';
 
-of('World')
-  .pipe(map((name) => `Hello, ${name}!`))
-  .subscribe((data) => {
-    console.log(data);
-  });
+const source = interval(10);
+const example = source.pipe(
+  map((val) => {
+    if (val > 5) {
+      throw val;
+    }
+    return val;
+  })
+);
+
+const subscribe = example.subscribe((val) => {
+  console.log(val);
+});

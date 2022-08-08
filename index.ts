@@ -11,15 +11,14 @@ const example = interval(10).pipe(
     return val;
   }),
   retryWhen((errors) => {
-    // return errors.pipe(
-    //   tap((val) => {
-    //     console.log(`value ${val} was too high`);
-    //   }),
-    //   delayWhen((val) => {
-    //     return timer(val * 1000);
-    //   })
-    // );
-    return errors;
+    return errors.pipe(
+      tap((val) => {
+        console.log(`value ${val} was too high`);
+      }),
+      delayWhen((val) => {
+        return timer(val * 1000);
+      })
+    );
   })
 );
 

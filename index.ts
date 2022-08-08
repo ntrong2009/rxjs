@@ -1,14 +1,22 @@
 import './style.css';
 
-import { map, interval } from 'rxjs';
+import { map, interval, timer } from 'rxjs';
+import { tap, retryWhen, delayWhen } from 'rxjs/operators';
 
-const source = interval(10);
-const example = source.pipe(
+const example = interval(10).pipe(
   map((val) => {
     if (val > 5) {
       throw val;
     }
     return val;
+  }),
+  retryWhen((errors) => {
+    return errors.pipe(
+      tap((val) => {
+        console.log(`value ${val} was too high`);
+      }),
+      delayWhen((val) => timer(val * 1000))
+    );
   })
 );
 
